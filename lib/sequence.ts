@@ -1,7 +1,7 @@
 // NOTE:
 // - Your repo currently uses PNGs named: `public/sequence/frame_000_...png`
 // - If you convert to WebP, update `FRAME_EXT` + filenames below to match.
-export const FRAME_EXT = "png" as const;
+export const FRAME_EXT = "webp" as const;
 export const FRAME_COUNT = 120; // 000..119
 
 // Delay fragment is part of the exported filename from your source tool.
