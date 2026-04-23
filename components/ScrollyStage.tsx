@@ -12,8 +12,8 @@ export function ScrollyStage() {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: scrollerRef,
-    offset: ["start start", "end end"],
-    trackContentSize: true,
+    // Standard for tall scrolly sections: full 0–1 as the block crosses the viewport
+    offset: ["start end", "end start"],
   });
 
   const [preload, setPreload] = useState<{ done: boolean; loaded: number; total: number }>({
