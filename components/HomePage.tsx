@@ -24,6 +24,14 @@ export function HomePage() {
             </a>
             <a
               className="text-zinc-300/90 underline-offset-4 hover:text-white hover:underline"
+              href={PROFILE.github}
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
+            <a
+              className="text-zinc-300/90 underline-offset-4 hover:text-white hover:underline"
               href={PROFILE.linkedin}
               target="_blank"
               rel="noreferrer"

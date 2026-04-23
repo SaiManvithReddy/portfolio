@@ -8,5 +8,7 @@ export const PROFILE = {
   location: "West Haven, CT · United States",
   email: "saimanvith31@gmail.com",
   linkedin: "https://www.linkedin.com/in/sai-manvith-reddy-buchi-reddy/",
+  /** Public profile (repos, activity) */
+  github: "https://github.com/SaiManvithReddy",
   oneLiner: "I build things that work — fast, scalable, and smart.",
 } as const;
