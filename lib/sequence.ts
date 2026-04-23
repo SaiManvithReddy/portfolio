@@ -19,3 +19,16 @@ export function getFrameSrc(index: number) {
   const clamped = Math.max(0, Math.min(FRAME_COUNT - 1, Math.floor(index)));
   return `/sequence/frame_${pad3(clamped)}_${DELAY_FRAGMENT}.${FRAME_EXT}`;
 }
+
+/**
+ * Use an absolute URL in the browser so the canvas always requests the same origin
+ * as the page (avoids edge cases with relative resolution on some hosts).
+ */
+export function getFrameUrlForClient(index: number) {
+  const path = getFrameSrc(index);
+  if (typeof window === "undefined") return path;
+  return new URL(path, window.location.origin).href;
+}
+
+/** First frame URL path (must match `getFrameSrc(0)` — used in error UI). */
+export const FIRST_FRAME_PATH = `/sequence/frame_000_${DELAY_FRAGMENT}.${FRAME_EXT}`;
