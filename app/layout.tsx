@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(PROFILE.siteUrl),
   title: "Sai Manvith Reddy — Backend & Full-Stack Software Engineer",
   description:
-    "Backend and full-stack engineer with 3 years shipping Python, FastAPI, and ML systems at Evernorth Health Services and SnapMatePhoto. MS CS, University of Bridgeport. Open to full-time SWE roles.",
+    "Backend and full-stack engineer with 2+ years shipping Python, FastAPI, and ML systems at Evernorth Health Services and SnapMatePhoto. MS CS, University of Bridgeport. Open to full-time SWE roles.",
   openGraph: {
     type: "website",
     url: PROFILE.siteUrl,

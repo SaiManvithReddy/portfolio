@@ -17,10 +17,10 @@ const experience: ExperienceCard[] = [
     employment: "Internship",
     period: "Feb 2026 – Present · 3 mos",
     bullets: [
-      "Owned the end-to-end Request to Book workflow — from product scoping through deployment — using React.js, TypeScript, Python, and REST APIs",
-      "Optimized frontend component architecture and backend API integrations in PHP/ThinkPHP and JavaScript, improving search performance and marketplace data accuracy across the platform",
-      "Integrated Reddit Conversion API (CAPI) for event tracking and resolved SMTP/DKIM email delivery failures, debugging cross-layer production issues spanning APIs, data pipelines, and infrastructure",
-      "Authored technical runbooks adopted by both engineering and non-technical teams, reducing onboarding time and cross-team ambiguity across the platform",
+      "Took the Request to Book feature from scoping to deployed — React, TypeScript, Python, REST APIs. I scoped it, built it, shipped it, and handed it off with docs.",
+      "Dug into the PHP/ThinkPHP API layer to fix search accuracy and marketplace data bugs — traced the problem through multiple services before finding the root cause",
+      "Wired up Reddit CAPI for conversion tracking and debugged SMTP/DKIM delivery failures — the kind of cross-stack tracing that teaches you how a whole system connects",
+      "Wrote runbooks non-technical teammates could actually follow — good documentation is an engineering deliverable too",
     ],
     tag: "React · TypeScript · Python · PHP/ThinkPHP · REST · CAPI",
     href: "https://snapmatephoto.com",
@@ -33,10 +33,10 @@ const experience: ExperienceCard[] = [
     period: "Feb 2025 – Nov 2025 · 10 mos",
     location: "United States · Hybrid",
     bullets: [
-      "Designed and shipped Python/FastAPI microservices integrated with PostgreSQL on AWS, cutting API response times by 30% for mission-critical healthcare workflows — led full stakeholder management from prototype to production",
-      "Built Kafka-based ETL pipelines with Python and Pandas for real-time data ingestion, reducing manual processing overhead by 20%",
-      "Integrated OpenAI GPT and LangChain into internal tooling, automating ticket triage and log summarization through structured prompt pipelines validated for production reliability",
-      "Deployed containerized services via Docker and Kubernetes with CI/CD pipelines; added structured logging and monitoring dashboards, reducing downtime by 20% and maintaining SLA adherence",
+      "Built FastAPI microservices on AWS for pharmacy benefit workflows — response times dropped 30% from what the legacy service delivered. Owned it from the first design meeting to the production handoff.",
+      "Designed Kafka + Pandas ETL pipelines for real-time health data ingestion — cut 20% of the manual processing work the team was doing by hand each day",
+      "Wired OpenAI GPT and LangChain into internal tooling for ticket triage and log summarization — built the prompt pipelines, added monitoring, and shipped it to the team",
+      "Containerized everything with Docker and Kubernetes, then added structured logging and dashboards so we could actually see what was happening — downtime dropped 20%",
     ],
     tag: "Python · FastAPI · AWS · PostgreSQL · Kafka · LangChain · Docker · K8s",
   },
@@ -47,9 +47,9 @@ const experience: ExperienceCard[] = [
     period: "Jun 2022 – Aug 2023 · 1 yr 3 mos",
     location: "Hyderabad, Telangana, India · On-site",
     bullets: [
-      "Shipped Python/FastAPI backend services powering core product features, reducing data-processing overhead across high-traffic workflows in a resource-constrained startup environment",
-      "Built and maintained production REST API endpoints consumed by the React frontend, delivering real-time data across multiple user-facing surfaces with zero-downtime deployments",
-      "Trained and shipped classification models with PyTorch and Scikit-learn, iterating through experiments to hit accuracy targets before each production rollout",
+      "My first engineering job — built Python/FastAPI backend services at a small startup in Hyderabad. Fast-paced, owned features from API design to deployment with little hand-holding.",
+      "Built the REST endpoints the React frontend depended on for real-time data — reliability was non-negotiable because the frontend team couldn't ship without them",
+      "Ran experiments with PyTorch and Scikit-learn until the classification models hit accuracy targets worth shipping, then got them into production",
     ],
     tag: "Python · FastAPI · PyTorch · Scikit-learn · REST · AWS",
   },
@@ -60,9 +60,9 @@ const experience: ExperienceCard[] = [
     period: "Nov 2025 – Dec 2025",
     location: "University of Bridgeport",
     bullets: [
-      "Designed an ML-driven system detecting disruption risks using logistics, trade, and environmental data",
-      "Developed RESTful interfaces with FastAPI to deliver real-time inference and analytics",
-      "Built a monitoring dashboard with Streamlit for data visualization and risk scoring",
+      "Solo MS capstone — built an ML system that flags supply chain disruption risks from logistics, trade flow, and environmental data. The full pipeline, not just a model.",
+      "FastAPI inference layer so the model's output was actually queryable in real time, not just a notebook cell you run manually",
+      "Streamlit dashboard for risk scoring and visualization — made the results usable for someone who isn't looking at raw model output",
     ],
     tag: "Python · FastAPI · Streamlit · ML",
   },
@@ -82,7 +82,7 @@ export function Projects() {
             , and impact.
           </h2>
           <p className="mt-4 text-balance text-sm leading-relaxed text-zinc-400/90 sm:text-base">
-            Three years across healthcare tech, product startups, and AI — full ownership from design to production.
+            What I&apos;ve actually built, what it does, and what I learned from shipping it.
           </p>
         </div>
 

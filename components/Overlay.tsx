@@ -94,11 +94,12 @@ export function Overlay({ scrollYProgress, className }: Props) {
             >
               <p className="text-xs font-medium tracking-[0.28em] text-zinc-500">FOCUS</p>
               <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] sm:text-4xl sm:leading-tight">
-                Backend systems built for production — not just demos.
+                I think in systems, not just features.
               </h2>
               <p className="mt-3 max-w-sm text-sm leading-relaxed text-zinc-400/90 sm:text-base">
-                Python, FastAPI, Node.js, PostgreSQL, AWS, Kafka — microservices, ETL pipelines, and REST APIs shipped
-                end-to-end with measurable impact. 30% faster APIs. 20% less downtime.
+                When something is slow, I want to know why. FastAPI microservices, Kafka pipelines, Docker + K8s — built
+                and run under real load at Evernorth handling live healthcare data. 30% faster APIs. 20% less downtime.
+                Owned from the first design call to production monitoring.
               </p>
             </motion.div>
 
@@ -108,11 +109,11 @@ export function Overlay({ scrollYProgress, className }: Props) {
             >
               <p className="text-xs font-medium tracking-[0.28em] text-zinc-500">ALSO</p>
               <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] sm:text-4xl sm:leading-tight">
-                AI and ML that earns its place in production.
+                ML only counts if it works in production.
               </h2>
               <p className="mt-3 max-w-sm text-right text-sm leading-relaxed text-zinc-400/90 sm:ml-auto sm:text-base">
-                LangChain, OpenAI, PyTorch — automating ticket triage and log analysis at Evernorth, building
-                user-facing features at SnapMatePhoto. Validated, monitored, and in prod.
+                Shipped LangChain pipelines at Evernorth, trained PyTorch classifiers at Tericsoft, built an ML risk
+                system end-to-end as a grad capstone. Demo accuracy is easy — production reliability is the actual work.
               </p>
             </motion.div>
           </div>

@@ -12,5 +12,5 @@ export const PROFILE = {
   github: "https://github.com/SaiManvithReddy",
   /** Production / primary URL (update if you add a custom domain in Vercel) */
   siteUrl: "https://portfolio-qwdrxbfnn-saimanvithreddys-projects.vercel.app",
-  oneLiner: "Backend and full-stack engineer — 3 years shipping Python, FastAPI, and ML systems across healthcare tech and product startups. Open to full-time SWE roles.",
+  oneLiner: "Backend engineer who cares about what happens after deployment — reliability, observability, ownership. Python, FastAPI, AWS. 2+ years across healthcare and product. MS CS. Open to full-time SWE.",
 } as const;
