@@ -14,6 +14,7 @@ export function ScrollyStage() {
   const { scrollYProgress } = useScroll({
     target: scrollerRef,
     offset: ["start start", "end end"],
+    trackContentSize: true,
   });
 
   const [preload, setPreload] = useState<{ done: boolean; loaded: number; total: number }>({
@@ -26,7 +27,7 @@ export function ScrollyStage() {
     <section
       id="scrolly"
       ref={scrollerRef}
-      className="relative h-[500vh] bg-[#121212] text-zinc-100"
+      className="relative h-[500vh] overflow-x-clip bg-[#121212] text-zinc-100"
     >
       <div ref={stageRef} className="sticky top-0 h-screen w-full">
         <ScrollyCanvas

@@ -10,5 +10,7 @@ export const PROFILE = {
   linkedin: "https://www.linkedin.com/in/sai-manvith-reddy-buchi-reddy/",
   /** Public profile (repos, activity) */
   github: "https://github.com/SaiManvithReddy",
+  /** Production / primary URL (update if you add a custom domain in Vercel) */
+  siteUrl: "https://portfolio-qwdrxbfnn-saimanvithreddys-projects.vercel.app",
   oneLiner: "I build things that work — fast, scalable, and smart.",
 } as const;

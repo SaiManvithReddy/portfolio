@@ -70,7 +70,7 @@ const experience: ExperienceCard[] = [
 
 export function Projects() {
   return (
-    <section id="work" className="relative border-t border-white/10 bg-[#0b0b0b]">
+    <section id="work" className="relative overflow-x-clip border-t border-white/10 bg-[#0b0b0b]">
       <div className="pointer-events-none absolute inset-0 bg-grid-fade opacity-25" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-6xl px-6 py-16 sm:px-10 sm:py-20">

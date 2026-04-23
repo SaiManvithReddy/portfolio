@@ -11,7 +11,14 @@ body {
   height: 100%;
 }
 
+html {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
 body {
+  overflow-x: clip;
+  max-width: 100%;
   background: #121212;
   color: rgb(244 244 245);
   -webkit-font-smoothing: antialiased;

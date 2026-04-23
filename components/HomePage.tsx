@@ -6,7 +6,7 @@ import { PROFILE } from "@/lib/profile";
 
 export function HomePage() {
   return (
-    <div id="top" className="min-h-screen bg-[#121212] text-zinc-100">
+    <div id="top" className="min-h-screen w-full min-w-0 max-w-full overflow-x-clip bg-[#121212] text-zinc-100">
       <ScrollyStage />
       <Projects />
 

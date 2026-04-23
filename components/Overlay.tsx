@@ -44,9 +44,13 @@ export function Overlay({ scrollYProgress, className }: Props) {
   );
 
   return (
-    <div className={className ? `${className} relative` : "relative h-full w-full"}>
+    <div
+      className={
+        className ? `${className} relative overflow-hidden` : "relative h-full w-full overflow-hidden"
+      }
+    >
       <motion.div
-        className="pointer-events-none absolute -inset-24 opacity-[0.18] mix-blend-screen"
+        className="pointer-events-none absolute inset-0 opacity-[0.18] mix-blend-screen"
         style={{ opacity: glowOpacity, ...grainStyle }}
         aria-hidden="true"
       />

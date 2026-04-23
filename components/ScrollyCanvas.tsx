@@ -3,7 +3,7 @@
 import { useMotionValueEvent, type MotionValue } from "framer-motion";
 import { useCallback, useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 
-import { FRAME_COUNT, getFrameSrc } from "@/lib/sequence";
+import { FRAME_COUNT, getFrameSrc, getFrameUrlForClient } from "@/lib/sequence";
 
 type Props = {
   /** Scroll progress (0..1) for the scrollytelling track */
@@ -89,7 +89,6 @@ export function ScrollyCanvas({ scrollYProgress, sizeRef, onPreloadState, classN
       const cssW = stage.clientWidth;
       const cssH = stage.clientHeight;
 
-      // If layout isn't ready, skip
       if (cssW < 2 || cssH < 2) return;
 
       // Background color matches page background for seamless letterboxing
@@ -169,28 +168,19 @@ export function ScrollyCanvas({ scrollYProgress, sizeRef, onPreloadState, classN
       new Promise<void>((resolve, reject) => {
         const img = new Image();
         img.decoding = "async";
-        img.src = getFrameSrc(index);
+        img.src = getFrameUrlForClient(index);
         img.onload = () => {
-          // Prefer async decode to reduce main-thread jank when possible
+          if (cancelled) return;
+          // Register pixels immediately. Waiting only on `decode()` has caused blank
+          // canvas on some production builds while local dev still worked.
+          imgs[index] = img;
+          schedulePaint(latestProgressRef.current);
+          // Optional: decode in background (don’t block marking the image drawable)
           const anyImg = img as HTMLImageElement & { decode?: () => Promise<void> };
           if (typeof anyImg.decode === "function") {
-            anyImg
-              .decode()
-              .then(() => {
-                if (cancelled) return;
-                imgs[index] = img;
-                resolve();
-              })
-              .catch(() => {
-                if (cancelled) return;
-                imgs[index] = img;
-                resolve();
-              });
-          } else {
-            if (cancelled) return;
-            imgs[index] = img;
-            resolve();
+            anyImg.decode().then(() => schedulePaint(latestProgressRef.current)).catch(() => undefined);
           }
+          resolve();
         };
         img.onerror = (e) => reject(e);
       });
@@ -234,10 +224,22 @@ export function ScrollyCanvas({ scrollYProgress, sizeRef, onPreloadState, classN
     if (Number.isFinite(v)) schedulePaint(v);
   });
 
-  // Initial paint (guarded so NaN from scrollYProgress does not break the first frame)
+  // Initial + delayed repaints: production can measure layout a tick later than local dev
   useEffect(() => {
     const v = scrollYProgress.get();
     schedulePaint(Number.isFinite(v) ? v : 0);
+    const t0 = window.setTimeout(() => schedulePaint(latestProgressRef.current), 0);
+    const t1 = window.setTimeout(() => schedulePaint(latestProgressRef.current), 100);
+    let raf0 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf0 = requestAnimationFrame(() => schedulePaint(latestProgressRef.current));
+    });
+    return () => {
+      clearTimeout(t0);
+      clearTimeout(t1);
+      cancelAnimationFrame(raf1);
+      if (raf0) cancelAnimationFrame(raf0);
+    };
   }, [scrollYProgress, schedulePaint]);
 
   return (
