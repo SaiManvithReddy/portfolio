@@ -7,7 +7,7 @@ import { ScrollyStage } from "@/components/ScrollyStage";
 import { PROFILE } from "@/lib/profile";
 
 function FooterEmail() {
-  const [label, setLabel] = useState(PROFILE.email);
+  const [label, setLabel] = useState<string>(PROFILE.email);
 
   function copy() {
     navigator.clipboard.writeText(PROFILE.email).then(() => {
