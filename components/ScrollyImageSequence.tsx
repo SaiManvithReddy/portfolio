@@ -1,7 +1,7 @@
 "use client";
 
-import { useMotionValueEvent, type MotionValue } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useAnimationFrame, useSpring, type MotionValue } from "framer-motion";
+import { useCallback, useEffect, useRef } from "react";
 
 import { FRAME_COUNT, getFrameSrc, getFrameUrlForClient } from "@/lib/sequence";
 
@@ -21,15 +21,24 @@ function indexForProgress(v: number) {
 }
 
 /**
- * Same scroll→frame mapping as the old canvas, but uses a real &lt;img&gt; (object-fit: cover)
- * so production matches “open PNG in a new tab” — no canvas2d / decode edge cases.
+ * Scroll-scrubbed sequence using &lt;img object-fit:cover&gt; + **non-React** `img.src` updates
+ * (no setState in the hot path) so it stays smooth in production, same as a canvas + drawImage
+ * but without 2D context quirks on some hosts.
  */
 export function ScrollyImageSequence({ scrollYProgress, onPreloadState, className }: Props) {
-  const rafRef = useRef<number | null>(null);
-  const latestV = useRef(0);
-  const [src, setSrc] = useState(() => getFrameSrc(0));
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const lastIndexRef = useRef(-1);
+  const progressRef = useRef<MotionValue<number>>(scrollYProgress);
 
-  // Warm the browser cache (same as before) so src swaps stay instant after load
+  // Slightly smears scroll to reduce micro-jitter; increase stiffness to track scroll more 1:1
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 260,
+    damping: 34,
+    mass: 0.18,
+  });
+  progressRef.current = smoothProgress;
+
+  // Preload: warm the HTTP cache; display path never re-renders
   useEffect(() => {
     let cancelled = false;
     onPreloadState?.({ done: false, loaded: 0, total: FRAME_COUNT });
@@ -37,14 +46,14 @@ export function ScrollyImageSequence({ scrollYProgress, onPreloadState, classNam
 
     const loadOne = (i: number) =>
       new Promise<void>((resolve, reject) => {
-        const img = new Image();
-        img.src = getFrameUrlForClient(i);
-        img.onload = () => {
+        const im = new Image();
+        im.src = getFrameUrlForClient(i);
+        im.onload = () => {
           if (cancelled) return;
           ok[i] = true;
           resolve();
         };
-        img.onerror = () => reject(new Error("frame"));
+        im.onerror = () => reject(new Error("frame"));
       });
 
     (async () => {
@@ -71,44 +80,45 @@ export function ScrollyImageSequence({ scrollYProgress, onPreloadState, classNam
     };
   }, [onPreloadState]);
 
-  const applyProgress = useCallback((v: number) => {
-    const idx = indexForProgress(v);
-    setSrc(typeof window !== "undefined" ? getFrameUrlForClient(idx) : getFrameSrc(idx));
+  // Stable: never rebind Framer’s frame loop; read latest progress from a ref
+  const tick = useCallback(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    const p = progressRef.current.get();
+    if (!Number.isFinite(p)) return;
+    const idx = indexForProgress(p);
+    if (idx === lastIndexRef.current) return;
+    lastIndexRef.current = idx;
+    el.src = getFrameUrlForClient(idx);
   }, []);
 
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (!Number.isFinite(v)) return;
-    latestV.current = v;
-    if (rafRef.current != null) return;
-    rafRef.current = requestAnimationFrame(() => {
-      rafRef.current = null;
-      applyProgress(latestV.current);
-    });
-  });
+  useAnimationFrame(tick);
 
+  // First paint + after layout
   useEffect(() => {
-    const v = scrollYProgress.get();
-    applyProgress(Number.isFinite(v) ? v : 0);
-  }, [scrollYProgress, applyProgress]);
-
-  // Keep in sync if scroll motion updates without firing "change" (e.g. layout)
-  useEffect(() => {
-    const t = window.setTimeout(() => applyProgress(scrollYProgress.get()), 0);
-    const t2 = window.setTimeout(() => applyProgress(scrollYProgress.get()), 120);
+    const run = () => {
+      if (!imgRef.current) return;
+      lastIndexRef.current = -1;
+      tick();
+    };
+    run();
+    const t = requestAnimationFrame(run);
+    const t2 = window.setTimeout(run, 50);
     return () => {
-      clearTimeout(t);
+      cancelAnimationFrame(t);
       clearTimeout(t2);
     };
-  }, [applyProgress, scrollYProgress]);
+  }, [scrollYProgress, tick]);
 
   return (
     <div className={className} style={{ background: "#121212" }}>
-      {/* 120 scroll-scrubbed frames — next/image is not suited for this pattern */}
+      {/* Scroll-scrubbed frames are not a fit for next/image */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={src}
+        ref={imgRef}
+        src={getFrameSrc(0)}
         alt=""
-        decoding="async"
+        decoding="sync"
         fetchPriority="high"
         className="pointer-events-none h-full w-full select-none object-cover"
         style={{ minHeight: "100%", minWidth: "100%" }}
