@@ -18,19 +18,22 @@ function useSoftenedProgress(mv: MotionValue<number>) {
 export function Overlay({ scrollYProgress, className }: Props) {
   const p = useSoftenedProgress(scrollYProgress);
 
-  // Section 1: centered hero (0% scroll zone)
-  const s1Opacity = useTransform(p, [0, 0.12, 0.2], [1, 1, 0]);
-  const s1Y = useTransform(p, [0, 0.22], [0, -18]);
+  // progress 0 = page load (section top at viewport top)
+  // progress 1 = section bottom at viewport bottom (~400vh of scroll)
 
-  // Section 2: left statement (~30%)
-  const s2Opacity = useTransform(p, [0.22, 0.3, 0.42, 0.5], [0, 1, 1, 0]);
-  const s2Y = useTransform(p, [0.22, 0.4], [26, 0]);
-  const s2X = useTransform(p, [0.22, 0.45], [-10, 0]);
+  // Section 1: hero — full opacity at load, fades as scroll begins
+  const s1Opacity = useTransform(p, [0, 0.18, 0.28], [1, 1, 0]);
+  const s1Y = useTransform(p, [0, 0.30], [0, -18]);
 
-  // Section 3: right statement (~60%)
-  const s3Opacity = useTransform(p, [0.52, 0.6, 0.72, 0.8], [0, 1, 1, 0]);
-  const s3Y = useTransform(p, [0.55, 0.75], [28, 0]);
-  const s3X = useTransform(p, [0.55, 0.75], [12, 0]);
+  // Section 2: FOCUS (~30–60% of scroll)
+  const s2Opacity = useTransform(p, [0.30, 0.40, 0.54, 0.62], [0, 1, 1, 0]);
+  const s2Y = useTransform(p, [0.30, 0.54], [26, 0]);
+  const s2X = useTransform(p, [0.30, 0.54], [-10, 0]);
+
+  // Section 3: ALSO (~65–100% of scroll)
+  const s3Opacity = useTransform(p, [0.65, 0.74, 0.88, 1.0], [0, 1, 1, 0]);
+  const s3Y = useTransform(p, [0.65, 0.88], [28, 0]);
+  const s3X = useTransform(p, [0.65, 0.88], [12, 0]);
 
   // Ambient "film" vignette tied to global progress
   const glowOpacity = useTransform(p, [0, 0.5, 1], [0.35, 0.6, 0.35]);

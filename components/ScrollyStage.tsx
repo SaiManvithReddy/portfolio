@@ -13,7 +13,7 @@ export function ScrollyStage() {
   const { scrollYProgress } = useScroll({
     target: scrollerRef,
     // Standard for tall scrolly sections: full 0–1 as the block crosses the viewport
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   });
 
   const [preload, setPreload] = useState<{ done: boolean; loaded: number; total: number }>({

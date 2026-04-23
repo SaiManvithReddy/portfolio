@@ -1,16 +1,36 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 
 import { PROFILE } from "@/lib/profile";
 
 const nav = [
   { href: "#work", label: "Work", external: false as const },
   { href: "#scrolly", label: "About", external: false as const },
-  { href: PROFILE.github, label: "GitHub", external: true as const, newTab: true as const },
-  { href: PROFILE.linkedin, label: "LinkedIn", external: true as const, newTab: true as const },
-  { href: `mailto:${PROFILE.email}`, label: "Email", external: true as const, newTab: false as const },
+  { href: PROFILE.github, label: "GitHub", external: true as const },
+  { href: PROFILE.linkedin, label: "LinkedIn", external: true as const },
 ] as const;
+
+function EmailCopyButton() {
+  const [label, setLabel] = useState("Email");
+
+  function copy() {
+    navigator.clipboard.writeText(PROFILE.email).then(() => {
+      setLabel("Copied!");
+      setTimeout(() => setLabel("Email"), 2000);
+    });
+  }
+
+  return (
+    <button
+      onClick={copy}
+      className="rounded-full px-3 py-2 text-sm text-zinc-300/90 transition hover:text-white"
+    >
+      {label}
+    </button>
+  );
+}
 
 export function SiteHeader() {
   return (
@@ -30,7 +50,8 @@ export function SiteHeader() {
               <a
                 key={item.label}
                 href={item.href}
-                {...(item.newTab ? { target: "_blank", rel: "noreferrer" } : {})}
+                target="_blank"
+                rel="noreferrer"
                 className="rounded-full px-3 py-2 text-sm text-zinc-300/90 transition hover:text-white"
               >
                 {item.label}
@@ -45,6 +66,7 @@ export function SiteHeader() {
               </Link>
             )
           )}
+          <EmailCopyButton />
         </nav>
 
         <div className="flex items-center gap-2">

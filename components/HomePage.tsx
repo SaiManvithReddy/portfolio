@@ -1,8 +1,30 @@
 "use client";
 
+import { useState } from "react";
+
 import { Projects } from "@/components/Projects";
 import { ScrollyStage } from "@/components/ScrollyStage";
 import { PROFILE } from "@/lib/profile";
+
+function FooterEmail() {
+  const [label, setLabel] = useState(PROFILE.email);
+
+  function copy() {
+    navigator.clipboard.writeText(PROFILE.email).then(() => {
+      setLabel("Copied!");
+      setTimeout(() => setLabel(PROFILE.email), 2000);
+    });
+  }
+
+  return (
+    <button
+      onClick={copy}
+      className="text-zinc-300/90 underline-offset-4 hover:text-white hover:underline"
+    >
+      {label}
+    </button>
+  );
+}
 
 export function HomePage() {
   return (
@@ -17,12 +39,7 @@ export function HomePage() {
             <span className="text-emerald-400/80">Open to full-time SWE roles</span>
           </p>
           <div className="flex flex-wrap items-center gap-4">
-            <a
-              className="text-zinc-300/90 underline-offset-4 hover:text-white hover:underline"
-              href={`mailto:${PROFILE.email}`}
-            >
-              {PROFILE.email}
-            </a>
+            <FooterEmail />
             <a
               className="text-zinc-300/90 underline-offset-4 hover:text-white hover:underline"
               href={PROFILE.github}
