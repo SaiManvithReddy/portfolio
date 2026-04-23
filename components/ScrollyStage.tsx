@@ -4,13 +4,12 @@ import { useScroll } from "framer-motion";
 import { useRef, useState } from "react";
 
 import { Overlay } from "@/components/Overlay";
-import { ScrollyCanvas } from "@/components/ScrollyCanvas";
+import { ScrollyImageSequence } from "@/components/ScrollyImageSequence";
 import { SiteHeader } from "@/components/SiteHeader";
 import { FIRST_FRAME_PATH, FRAME_COUNT } from "@/lib/sequence";
 
 export function ScrollyStage() {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
-  const stageRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({
     target: scrollerRef,
     offset: ["start start", "end end"],
@@ -29,10 +28,9 @@ export function ScrollyStage() {
       ref={scrollerRef}
       className="relative h-[500vh] overflow-x-clip bg-[#121212] text-zinc-100"
     >
-      <div ref={stageRef} className="sticky top-0 h-screen w-full">
-        <ScrollyCanvas
-          className="absolute inset-0 z-0"
-          sizeRef={stageRef}
+      <div className="sticky top-0 h-screen w-full">
+        <ScrollyImageSequence
+          className="absolute inset-0 z-0 overflow-hidden"
           scrollYProgress={scrollYProgress}
           onPreloadState={setPreload}
         />
@@ -55,7 +53,7 @@ export function ScrollyStage() {
         {preload.done && preload.loaded === 0 && (
           <div className="absolute inset-0 z-40 flex items-center justify-center p-4">
             <div className="max-w-md rounded-2xl border border-amber-500/30 bg-zinc-950/95 p-4 text-left text-sm text-zinc-200 shadow-2xl backdrop-blur">
-              <p className="font-medium text-amber-200/95">Scrolly frames not loading (0 / {FRAME_COUNT} images)</p>
+              <p className="font-medium text-amber-200/95">Scrolly frames not loading in the page (0 / {FRAME_COUNT} in cache)</p>
               <p className="mt-2 text-zinc-400">
                 Browsers need static files at{" "}
                 <code className="rounded bg-black/50 px-1.5 py-0.5 text-xs text-amber-100/90">{FIRST_FRAME_PATH}</code>{" "}
