@@ -20,7 +20,7 @@ const experience: ExperienceCard[] = [
       "Owned the end-to-end Request to Book workflow — from product scoping through deployment — using React.js, TypeScript, Python, and REST APIs",
       "Optimized frontend component architecture and backend API integrations in PHP/ThinkPHP and JavaScript, improving search performance and marketplace data accuracy across the platform",
       "Integrated Reddit Conversion API (CAPI) for event tracking and resolved SMTP/DKIM email delivery failures, debugging cross-layer production issues spanning APIs, data pipelines, and infrastructure",
-      "Operated in a full Agile environment (daily standups, sprint planning, retrospectives) and produced technical runbooks accessible to both engineering and non-technical stakeholders",
+      "Authored technical runbooks adopted by both engineering and non-technical teams, reducing onboarding time and cross-team ambiguity across the platform",
     ],
     tag: "React · TypeScript · Python · PHP/ThinkPHP · REST · CAPI",
     href: "https://snapmatephoto.com",
@@ -47,15 +47,15 @@ const experience: ExperienceCard[] = [
     period: "Jun 2022 – Aug 2023 · 1 yr 3 mos",
     location: "Hyderabad, Telangana, India · On-site",
     bullets: [
-      "Designed and deployed AI-powered application features using Python and FastAPI, improving backend processing efficiency across core product workflows",
-      "Built and maintained production-grade REST API endpoints integrated with the frontend, supporting real-time data delivery across multiple user-facing features",
-      "Developed and evaluated ML models using PyTorch and Scikit-learn, iterating on model performance to hit accuracy targets in a fast-paced startup environment",
+      "Shipped Python/FastAPI backend services powering core product features, reducing data-processing overhead across high-traffic workflows in a resource-constrained startup environment",
+      "Built and maintained production REST API endpoints consumed by the React frontend, delivering real-time data across multiple user-facing surfaces with zero-downtime deployments",
+      "Trained and shipped classification models with PyTorch and Scikit-learn, iterating through experiments to hit accuracy targets before each production rollout",
     ],
     tag: "Python · FastAPI · PyTorch · Scikit-learn · REST · AWS",
   },
   {
     company: "AI-Driven Supply Chain Risk Prediction",
-    role: "MS project",
+    role: "Graduate Capstone Project",
     employment: "Academic",
     period: "Nov 2025 – Dec 2025",
     location: "University of Bridgeport",
@@ -82,7 +82,7 @@ export function Projects() {
             , and impact.
           </h2>
           <p className="mt-4 text-balance text-sm leading-relaxed text-zinc-400/90 sm:text-base">
-            Full-time and internship experience, plus a graduate project—aligned with the detail on your profile.
+            Three years across healthcare tech, product startups, and AI — full ownership from design to production.
           </p>
         </div>
 

@@ -6,7 +6,7 @@ import { PROFILE } from "@/lib/profile";
 
 const nav = [
   { href: "#work", label: "Work", external: false as const },
-  { href: "#scrolly", label: "Intro", external: false as const },
+  { href: "#scrolly", label: "About", external: false as const },
   { href: PROFILE.github, label: "GitHub", external: true as const, newTab: true as const },
   { href: PROFILE.linkedin, label: "LinkedIn", external: true as const, newTab: true as const },
   { href: `mailto:${PROFILE.email}`, label: "Email", external: true as const, newTab: false as const },

@@ -4,7 +4,7 @@ export const PROFILE = {
   monogram: "SMR",
   pronouns: "He/Him",
   roleLine: "Software Engineer · Backend & Full Stack",
-  stack: "Python · Node.js · FastAPI · AWS · APIs & Cloud",
+  stack: "Python · FastAPI · Node.js · AWS · Kafka · Docker · LangChain",
   location: "West Haven, CT · United States",
   email: "saimanvith31@gmail.com",
   linkedin: "https://www.linkedin.com/in/sai-manvith-reddy-buchi-reddy/",
@@ -12,5 +12,5 @@ export const PROFILE = {
   github: "https://github.com/SaiManvithReddy",
   /** Production / primary URL (update if you add a custom domain in Vercel) */
   siteUrl: "https://portfolio-qwdrxbfnn-saimanvithreddys-projects.vercel.app",
-  oneLiner: "I build things that work — fast, scalable, and smart.",
+  oneLiner: "Backend and full-stack engineer — 3 years shipping Python, FastAPI, and ML systems across healthcare tech and product startups. Open to full-time SWE roles.",
 } as const;

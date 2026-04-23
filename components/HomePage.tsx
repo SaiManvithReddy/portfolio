@@ -13,7 +13,8 @@ export function HomePage() {
       <footer className="border-t border-white/10 bg-[#0b0b0b]">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-zinc-500 sm:flex-row sm:items-center sm:justify-between sm:px-10">
           <p>
-            © {new Date().getFullYear()} {PROFILE.name}. {PROFILE.location}
+            © {new Date().getFullYear()} {PROFILE.name}. {PROFILE.location} ·{" "}
+            <span className="text-emerald-400/80">Open to full-time SWE roles</span>
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <a

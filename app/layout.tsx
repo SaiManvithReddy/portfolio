@@ -14,9 +14,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(PROFILE.siteUrl),
-  title: "Sai Manvith Reddy Buchi Reddy — Software Engineer (Backend & Full Stack)",
+  title: "Sai Manvith Reddy — Backend & Full-Stack Software Engineer",
   description:
-    "Software engineer · Backend & full stack. Python, Node.js, FastAPI, AWS, APIs & cloud. MS CS @ University of Bridgeport. West Haven, CT. Open to SWE / full-stack / backend / ML engineering roles.",
+    "Backend and full-stack engineer with 3 years shipping Python, FastAPI, and ML systems at Evernorth Health Services and SnapMatePhoto. MS CS, University of Bridgeport. Open to full-time SWE roles.",
   openGraph: {
     type: "website",
     url: PROFILE.siteUrl,

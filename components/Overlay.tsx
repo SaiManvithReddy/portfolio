@@ -91,11 +91,11 @@ export function Overlay({ scrollYProgress, className }: Props) {
             >
               <p className="text-xs font-medium tracking-[0.28em] text-zinc-500">FOCUS</p>
               <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] sm:text-4xl sm:leading-tight">
-                APIs, cloud, and systems that stay fast under load.
+                Backend systems built for production — not just demos.
               </h2>
               <p className="mt-3 max-w-sm text-sm leading-relaxed text-zinc-400/90 sm:text-base">
-                Python, FastAPI, Node, PostgreSQL, AWS, Kafka—shipping microservices, ETL, and production REST with clear
-                ownership end to end.
+                Python, FastAPI, Node.js, PostgreSQL, AWS, Kafka — microservices, ETL pipelines, and REST APIs shipped
+                end-to-end with measurable impact. 30% faster APIs. 20% less downtime.
               </p>
             </motion.div>
 
@@ -105,11 +105,11 @@ export function Overlay({ scrollYProgress, className }: Props) {
             >
               <p className="text-xs font-medium tracking-[0.28em] text-zinc-500">ALSO</p>
               <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] sm:text-4xl sm:leading-tight">
-                AI/ML that ships—not notebook demos.
+                AI and ML that earns its place in production.
               </h2>
               <p className="mt-3 max-w-sm text-right text-sm leading-relaxed text-zinc-400/90 sm:ml-auto sm:text-base">
-                LLM integration, PyTorch, and full-stack product work—from SnapMatePhoto to healthcare pipelines at
-                Evernorth. Code that works in production.
+                LangChain, OpenAI, PyTorch — automating ticket triage and log analysis at Evernorth, building
+                user-facing features at SnapMatePhoto. Validated, monitored, and in prod.
               </p>
             </motion.div>
           </div>
