@@ -10,8 +10,11 @@ type Props = {
   scrollYProgress: MotionValue<number>;
   /** The element that defines the render box (usually the sticky stage) */
   sizeRef: RefObject<HTMLElement | null>;
-  /** Fires once the full sequence is decoded into memory (best effort) */
-  onSequenceReadyChange?: (ready: boolean) => void;
+  /**
+   * Preload pass finished (all requests settled).
+   * `loaded` is how many images actually decoded; if 0, the canvas will stay empty (usually missing `public/sequence` on deploy).
+   */
+  onPreloadState?: (state: { done: boolean; loaded: number; total: number }) => void;
   className?: string;
 };
 
@@ -44,23 +47,31 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-function findNearestLoadedIndex(ideal: number, loaded: boolean[]) {
-  if (loaded[ideal]) return ideal;
+function isImageDrawable(img: HTMLImageElement | undefined): img is HTMLImageElement {
+  return Boolean(img && img.complete && img.naturalWidth > 0);
+}
 
-  for (let d = 1; d < loaded.length; d += 1) {
-    const a = ideal - d;
-    if (a >= 0 && loaded[a]) return a;
-    const b = ideal + d;
-    if (b < loaded.length && loaded[b]) return b;
+/**
+ * Use decoded Image elements, not a parallel `loaded[]` array — in React 18 dev / edge cases
+ * the booleans can get out of sync with `imagesRef` while the images are still valid.
+ */
+function findNearestDrawableIndex(ideal: number, images: (HTMLImageElement | undefined)[]) {
+  const safeIdeal = Math.max(0, Math.min(images.length - 1, Math.floor(ideal)));
+  if (isImageDrawable(images[safeIdeal])) return safeIdeal;
+
+  for (let d = 1; d < images.length; d += 1) {
+    const a = safeIdeal - d;
+    if (a >= 0 && isImageDrawable(images[a])) return a;
+    const b = safeIdeal + d;
+    if (b < images.length && isImageDrawable(images[b])) return b;
   }
 
   return -1;
 }
 
-export function ScrollyCanvas({ scrollYProgress, sizeRef, onSequenceReadyChange, className }: Props) {
+export function ScrollyCanvas({ scrollYProgress, sizeRef, onPreloadState, className }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
-  const loadedRef = useRef<boolean[]>([]);
   const dprRef = useRef(1);
   const rafRef = useRef<number | null>(null);
   const latestProgressRef = useRef(0);
@@ -86,13 +97,14 @@ export function ScrollyCanvas({ scrollYProgress, sizeRef, onSequenceReadyChange,
       ctx.fillStyle = "#121212";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      const p = clamp(progress01, 0, 1);
+      // Framer can briefly yield NaN for scrollYProgress before layout; that used to break frame index.
+      const p = Number.isFinite(progress01) ? clamp(progress01, 0, 1) : 0;
       const idealIndex = Math.round(p * (FRAME_COUNT - 1));
-      const frameIndex = findNearestLoadedIndex(idealIndex, loadedRef.current);
+      const frameIndex = findNearestDrawableIndex(idealIndex, imagesRef.current);
       if (frameIndex < 0) return;
 
       const img = imagesRef.current[frameIndex];
-      if (!img || !img.complete || img.naturalWidth <= 0) return;
+      if (!isImageDrawable(img)) return;
 
       ctx.imageSmoothingEnabled = true;
       // "high" is not in TS lib in all setups, cast for safety
@@ -102,7 +114,13 @@ export function ScrollyCanvas({ scrollYProgress, sizeRef, onSequenceReadyChange,
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       const rect = computeCoverRect(img.naturalWidth, img.naturalHeight, cssW, cssH);
-      ctx.drawImage(img, rect.x, rect.y, rect.w, rect.h);
+      try {
+        ctx.drawImage(img, rect.x, rect.y, rect.w, rect.h);
+      } catch (e) {
+        // e.g. canvas taint / CORS; same-origin static files should not hit this
+        // eslint-disable-next-line no-console
+        console.error("ScrollyCanvas drawImage failed:", e);
+      }
     },
     [sizeRef]
   );
@@ -144,10 +162,8 @@ export function ScrollyCanvas({ scrollYProgress, sizeRef, onSequenceReadyChange,
   useEffect(() => {
     let cancelled = false;
     const imgs: HTMLImageElement[] = new Array(FRAME_COUNT);
-    const loaded: boolean[] = new Array(FRAME_COUNT).fill(false);
     imagesRef.current = imgs;
-    loadedRef.current = loaded;
-    onSequenceReadyChange?.(false);
+    onPreloadState?.({ done: false, loaded: 0, total: FRAME_COUNT });
 
     const loadOne = (index: number) =>
       new Promise<void>((resolve, reject) => {
@@ -163,19 +179,16 @@ export function ScrollyCanvas({ scrollYProgress, sizeRef, onSequenceReadyChange,
               .then(() => {
                 if (cancelled) return;
                 imgs[index] = img;
-                loaded[index] = true;
                 resolve();
               })
               .catch(() => {
                 if (cancelled) return;
                 imgs[index] = img;
-                loaded[index] = true;
                 resolve();
               });
           } else {
             if (cancelled) return;
             imgs[index] = img;
-            loaded[index] = true;
             resolve();
           }
         };
@@ -207,22 +220,24 @@ export function ScrollyCanvas({ scrollYProgress, sizeRef, onSequenceReadyChange,
 
       if (cancelled) return;
 
-      onSequenceReadyChange?.(true);
+      const ok = imgs.filter((el) => isImageDrawable(el)).length;
+      onPreloadState?.({ done: true, loaded: ok, total: FRAME_COUNT });
       schedulePaint(latestProgressRef.current);
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [onSequenceReadyChange, schedulePaint]);
+  }, [onPreloadState, schedulePaint]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    schedulePaint(v);
+    if (Number.isFinite(v)) schedulePaint(v);
   });
 
-  // Initial paint
+  // Initial paint (guarded so NaN from scrollYProgress does not break the first frame)
   useEffect(() => {
-    schedulePaint(scrollYProgress.get());
+    const v = scrollYProgress.get();
+    schedulePaint(Number.isFinite(v) ? v : 0);
   }, [scrollYProgress, schedulePaint]);
 
   return (
